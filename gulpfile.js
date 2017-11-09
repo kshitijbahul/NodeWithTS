@@ -1,30 +1,40 @@
 'use strict;'
-import { gulp  } from "gulp";
-import { concat } from "gulp-concat";
-import { del } from "del";
-import { clean } from "gulp-clean";
-import { connect } from "gulp-connect";
-import { path } from "path";
-import { nodemon } from "nodemon";
-import { browserify } from "browserify";
-import { babelify } from "babelify";
-import { vinylSourceStream } from "vinyl-source-stream";
-import { vinylBuffer } from "vinyl-buffer";
-import { gulpSequence } from "gulp-sequence"
+const gulp  = require("gulp");
+const concat = require("gulp-concat");
+const del = require("del");
+const clean = require("gulp-clean");
+const connect = require("gulp-connect");
+const typescript = require('gulp-typescript');
+const tscConfig = require('./tsconfig.json');
+const path = require("path");
+const nodemon = require("nodemon");
+const browserify = require("browserify");
+//const babelify = require("babelify");
+const vinylSourceStream = require("vinyl-source-stream");
+const vinylBuffer = require("vinyl-buffer");
+const gulpSequence = require("gulp-sequence");
 
-gulp.task("clean",()=>{
+gulp.task('clean',()=>{
     del(['./build'],{force:true})
 });
 
-gulp.task("runExpress",(cb)=>{
+gulp.task('runExpress',(cb)=>{
     const options={
         watch: ['./build/'],
-        script: 'app.js',
+        script: './build/app.ts',
         
     }
     return nodemon(options).once('start',cb);
 });
 
+gulp.task('buildBackend',()=> {
+    return gulp
+      .src('src/**/*.ts')
+      .pipe(typescript(tscConfig.compilerOptions))
+      .on('error', function(){process.exit(1);})
+      .pipe(gulp.dest('build/'));
+});
 
-gulp.task("local",[]);
-gulp.task("default",[runExpress]);
+
+gulp.task('local',[]);
+gulp.task('default',['buildBackend','runExpress']);
