@@ -18,16 +18,7 @@ gulp.task('clean',()=>{
     del(['./build'],{force:true})
 });
 
-gulp.task('runExpress',(cb)=>{
-    const options={
-        watch: ['./build/'],
-        script: './build/app.ts',
-        
-    }
-    return nodemon(options).once('start',cb);
-});
-
-gulp.task('buildBackend',()=> {
+gulp.task('buildBackend',['clean'],()=> {
     return gulp
       .src('src/**/*.ts')
       .pipe(typescript(tscConfig.compilerOptions))
@@ -35,6 +26,15 @@ gulp.task('buildBackend',()=> {
       .pipe(gulp.dest('build/'));
 });
 
+gulp.task('runExpress',['buildBackend'],(cb)=>{
+    const options={
+        watch: ['./build/'],
+        script: './build/app.js',
+        
+    }
+    return nodemon(options).once('start',cb);
+});
 
 gulp.task('local',[]);
-gulp.task('default',['buildBackend','runExpress']);
+gulp.task('default',['runExpress']);
+//gulp.task('default',gulp.series('buildBackend','runExpress'));

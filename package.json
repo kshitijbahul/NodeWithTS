@@ -16,6 +16,7 @@
   "author": "Kshitij Bahul",
   "license": "ISC",
   "devDependencies": {
+    "@types/express": "4.0.39",
     "@types/node": "8.0.50",
     "babelify": "8.0.0",
     "body-parser": "1.18.2",
