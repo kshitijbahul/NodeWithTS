@@ -1,6 +1,6 @@
 'user strict;'
 import * as express from "express";
-import * as customerRouter from "./customer-router";
+const customerRouter = require('./customer-router');
 
 
 export function bootstrapServer(application:express.Application){
@@ -9,11 +9,11 @@ export function bootstrapServer(application:express.Application){
     })
     console.log(`the here is ${customerRouter}`)
     /* Express Application Setup */
-    application.use(express.json);
+    application.use(express.json());
     
     
     //Setting the routes
-    //application.use('/customers',customerRouter);
+    application.use('/customers',customerRouter);
 }
 let application:express.Application = express();
 bootstrapServer(application);
