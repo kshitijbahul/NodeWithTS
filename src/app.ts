@@ -1,6 +1,6 @@
 'user strict;'
 import * as express from "express";
-const customerRouter = require('./customer-router');
+const customerRouter = require('./routes/customer-router');
 
 
 export function bootstrapServer(application:express.Application){
